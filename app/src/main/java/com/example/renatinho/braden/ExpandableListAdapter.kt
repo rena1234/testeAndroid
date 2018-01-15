@@ -68,20 +68,6 @@ class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<Str
         val listItemText = view.findViewById<AppCompatTextView>(R.id.list_item_text) as AppCompatTextView
         listItemText.text = childText
 
-        if (convertView != null){
-            convertView.setOnClickListener(object: View.OnClickListener{
-                override fun onClick(view: View?) {
-                    if(view != null){
-                        val expandableList = view.findViewById<ExpandableListView>(R.id.expandable_list_view)
-                                as ExpandableListView;
-                        expandableList.collapseGroup(groupPosition)
-                    }
-                }
-
-            } )
-        } else{ print("convertView é nula") }
-
-
         return view
     }
 

@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
                 listHeader,listChild)
 
         expandable_list_view.setAdapter(expandableListAdapter)
+        expandable_list_view.setOnChildClickListener()
 
     }
 }
