@@ -25,16 +25,6 @@ class MainActivity : AppCompatActivity() {
                 listHeader,listChild)
 
         expandable_list_view.setAdapter(expandableListAdapter)
-        expandable_list_view.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
-            override fun onChildClick(listView: ExpandableListView?, clickedView: View?
-                                      , groupPosition: Int, childPosition: Int
-                                      , childId: Long): Boolean
-            {
-                if(listView != null)
-                    listView.collapseGroup(groupPosition)
-                return true
-            }
-        })
 
     }
 }
