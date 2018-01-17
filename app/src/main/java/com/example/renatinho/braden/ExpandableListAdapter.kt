@@ -38,11 +38,14 @@ class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<Str
                               convertView: View?, parent: ViewGroup?): View
     {
         val headerTitle = getGroup(groupPosition) as String
+
         val view: View = LayoutInflater.from(context).inflate(R.layout.list_header,parent
                 ,false)
+
         val listHeaderText = view.findViewById<AppCompatTextView>(R.id.list_header_text) as AppCompatTextView
-        listHeaderText.text = headerTitle
+
         listHeaderText.setTypeface(null, Typeface.BOLD)
+        listHeaderText.text = headerTitle
 
 
         return view
@@ -63,8 +66,10 @@ class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<Str
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean
                               , convertView: View?, parent: ViewGroup?): View {
         val childText = getChild(groupPosition,childPosition) as String
+        
         val view: View =  LayoutInflater.from(context).inflate(R.layout.list_item,parent
                 ,false)
+
         val listItemText = view.findViewById<AppCompatTextView>(R.id.list_item_text) as AppCompatTextView
         listItemText.text = childText
 

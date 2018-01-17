@@ -2,6 +2,8 @@ package com.example.renatinho.braden
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.ExpandableListView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -19,12 +21,20 @@ class MainActivity : AppCompatActivity() {
         listChild.put(listHeader[0],numberList)
         listChild.put(listHeader[1],fruitList)
 
-
         val expandableListAdapter = ExpandableListAdapter(this,
                 listHeader,listChild)
 
         expandable_list_view.setAdapter(expandableListAdapter)
-        expandable_list_view.setOnChildClickListener()
+        expandable_list_view.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
+            override fun onChildClick(listView: ExpandableListView?, clickedView: View?
+                                      , groupPosition: Int, childPosition: Int
+                                      , childId: Long): Boolean
+            {
+                if(listView != null)
+                    listView.collapseGroup(groupPosition)
+                return true
+            }
+        })
 
     }
 }
