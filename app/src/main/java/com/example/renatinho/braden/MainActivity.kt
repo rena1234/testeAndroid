@@ -12,29 +12,33 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val listHeader = listOf("numbers","fruits")
+        val listHeader = listOf("Percepção Sensorial"
+                ,"Umidade")
 
-        val numberList = listOf("one", "two")
+        val numberList = listOf("Ocasionalmente Molhada", "two")
         val fruitList = listOf("apple", "orange")
 
         val listChild = HashMap<String,List<String>>()
-        listChild.put(listHeader[0],numberList)
-        listChild.put(listHeader[1],fruitList)
+
+        listChild[listHeader[0]] = numberList
+        listChild[listHeader[1]] = fruitList
+
+        val coloredParents = HashSet<Int>()
 
         val expandableListAdapter = ExpandableListAdapter(this,
-                listHeader,listChild)
+                listHeader,listChild,coloredParents)
 
         expandable_list_view.setAdapter(expandableListAdapter)
-        expandable_list_view.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
-            override fun onChildClick(listView: ExpandableListView?, clickedView: View?
-                                      , groupPosition: Int, childPosition: Int
-                                      , childId: Long): Boolean
-            {
-                if(listView != null)
-                    listView.collapseGroup(groupPosition)
-                return true
-            }
-        })
+
+        val clickListener = ExpandableListView.OnChildClickListener{
+            listView: ExpandableListView?, _: View?
+            , groupPosition: Int, _: Int, _: Long
+            ->
+            listView?.collapseGroup(groupPosition)
+            coloredParents.add(groupPosition)
+            true
+        }
+        expandable_list_view.setOnChildClickListener(clickListener)
 
     }
 }

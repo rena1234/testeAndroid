@@ -9,7 +9,7 @@
         android:id="@+id/list_header_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textSize="20sp"/>
 
 
