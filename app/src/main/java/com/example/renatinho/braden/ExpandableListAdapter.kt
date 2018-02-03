@@ -23,7 +23,6 @@ class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<Str
 {
 
 
-
     override fun getGroup(position: Int): Any {
         return listOfHeaderData[position]
     }

@@ -29,13 +29,28 @@ class MainActivity : AppCompatActivity() {
                 listHeader,listChild,coloredParents)
 
         expandable_list_view.setAdapter(expandableListAdapter)
+	
+	val escolhas =  IntArray(6, {i -> -1})
 
         val clickListener = ExpandableListView.OnChildClickListener{
             listView: ExpandableListView?, _: View?
-            , groupPosition: Int, _: Int, _: Long
+            , groupPosition: Int, childPosition: Int, _: Long
             ->
             listView?.collapseGroup(groupPosition)
-            coloredParents.add(groupPosition)
+            if(coloredParents.contains(groupPosition) 
+	            && escolha[groupPosition] == childPosition )
+	    {
+	        
+		coloredParents.remove(groupPosition)
+		escolhas[groupPosition] = -1
+
+	    }
+	    else{
+	        escolhas[groupPosition] = childPosition;
+                if(!coloredParents.contains(groupPosition)){
+	            coloredParents.add(groupPosition)
+		}
+	    }
             true
         }
         expandable_list_view.setOnChildClickListener(clickListener)
