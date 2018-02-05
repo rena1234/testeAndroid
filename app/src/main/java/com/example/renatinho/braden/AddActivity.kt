@@ -13,7 +13,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 
-class Main2Activity : AppCompatActivity() {
+class AddActivity : AppCompatActivity() {
     private var mLevel: Int = 0
     private var mNextLevelButton: Button? = null
     private var mInterstitialAd: InterstitialAd? = null
@@ -21,15 +21,15 @@ class Main2Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.activity_add)
 
         // Create the next level button, which tries to show an interstitial when clicked.
-        mNextLevelButton = findViewById(R.id.next_level_button) as Button
+        mNextLevelButton = findViewById<View>(R.id.next_level_button) as Button
         mNextLevelButton!!.isEnabled = false
         mNextLevelButton!!.setOnClickListener { showInterstitial() }
 
         // Create the text view to show the level number.
-        mLevelTextView = findViewById(R.id.level) as TextView
+        mLevelTextView = findViewById<View>(R.id.level) as TextView
         mLevel = START_LEVEL
 
         // Create the InterstitialAd and set the adUnitId (defined in values/strings.xml).
@@ -43,7 +43,7 @@ class Main2Activity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main2, menu)
+        menuInflater.inflate(R.menu.menu_add, menu)
         return true
     }
 

@@ -5,8 +5,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ExpandableListView
 import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.Toast
+import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
+    
+    private val coloredParents = HashSet<Int>()
+    private var unmarkedParents = HashSet<Int>()
+    private val listChild = HashMap<String,List<String>>()
+    private val escolhas =  IntArray(6, {_ -> -1})
+    private val fimButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,19 +26,14 @@ class MainActivity : AppCompatActivity() {
         val numberList = listOf("Ocasionalmente Molhada", "two")
         val fruitList = listOf("apple", "orange")
 
-        val listChild = HashMap<String,List<String>>()
-
         listChild[listHeader[0]] = numberList
         listChild[listHeader[1]] = fruitList
-
-        val coloredParents = HashSet<Int>()
 
         val expandableListAdapter = ExpandableListAdapter(this,
                 listHeader,listChild,coloredParents)
 
         expandable_list_view.setAdapter(expandableListAdapter)
 	
-	val escolhas =  IntArray(6, {i -> -1})
 
         val clickListener = ExpandableListView.OnChildClickListener{
             listView: ExpandableListView?, _: View?
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             ->
             listView?.collapseGroup(groupPosition)
             if(coloredParents.contains(groupPosition) 
-	            && escolha[groupPosition] == childPosition )
+	            && escolhas[groupPosition] == childPosition )
 	    {
 	        
 		coloredParents.remove(groupPosition)
@@ -51,9 +54,41 @@ class MainActivity : AppCompatActivity() {
 	            coloredParents.add(groupPosition)
 		}
 	    }
-            true
+	    if(unmarkedParents.contains(groupPosition)){
+		unmarkedParents.remove(groupPosition)
+	    }
+            return true
         }
         expandable_list_view.setOnChildClickListener(clickListener)
+        fimButton = findViewById<View>(R.id.level) as Button
+	fimButton!!.isEnabled = false
+	fimButton!!.setOnClickListener{completaActivity()}
+    }
 
+    private fun retornaElementosDesmarcados(): HashSet<Int>{
+	val desmarcados= HashSet<Int>()
+	escolhas.forEachIndexed { i, escolhas ->
+	   if( escolha == -1){
+	       desmarcados.add(i)
+           }
+        }
+	return desmarcados
+    }
+
+    private fun completaActivity():{
+	val desmarcadosSet = retornaElementosDesmarcados()
+	if(!desmarcadosSet.empty){
+	    val text = "Complete this shit out"
+	    Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+	    toast.show()
+	    unmarkedParents = desmarcadosSet
+	}
+	else{
+	   val intent = Intent(this, AddActivity::class.java)    
+	   val contagem = escolhas.sum() + escolhas.size()
+	   intent.putExtra("contagem",contagem) 
+	   startActivity(intent)
+	}
+	
     }
 }

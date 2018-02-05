@@ -26,8 +26,8 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"></activity> <!-- Include the AdActivity configChanges and theme. -->
+            android:name=".AddActivity"
+            android:label="@string/title_activity_main2" /> <!-- Include the AdActivity configChanges and theme. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"

@@ -18,7 +18,8 @@ import android.widget.ExpandableListView
 
 class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<String>
                             , val listOfChildData: HashMap<String, List<String>>
-                            , val coloredParents: HashSet<Int>)
+                            , val coloredParents: HashSet<Int>
+			    , val unmarkedParents: HashSet<Int>)
                             : BaseExpandableListAdapter()
 {
 
@@ -48,6 +49,9 @@ class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<Str
         listHeaderText.setTypeface(null, Typeface.BOLD)
         listHeaderText.text = headerTitle
 
+        if(unmarkedParents.contains(groupPosition)){
+            listHeaderText.setTextColor(0xFF8363F0.toInt())
+        }
         if(coloredParents.contains(groupPosition)){
             listHeaderText.setTextColor(0xFF8363FF.toInt())
         }
