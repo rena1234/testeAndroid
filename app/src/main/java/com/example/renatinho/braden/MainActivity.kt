@@ -1,5 +1,6 @@
 package com.example.renatinho.braden
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     private var unmarkedParents = HashSet<Int>()
     private val listChild = HashMap<String,List<String>>()
     private val escolhas =  IntArray(6, {_ -> -1})
-    private val fimButton: Button? = null
+    private var fimButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         listChild[listHeader[1]] = fruitList
 
         val expandableListAdapter = ExpandableListAdapter(this,
-                listHeader,listChild,coloredParents)
+                listHeader,listChild,coloredParents, unmarkedParents)
 
         expandable_list_view.setAdapter(expandableListAdapter)
 	
@@ -57,38 +58,44 @@ class MainActivity : AppCompatActivity() {
 	    if(unmarkedParents.contains(groupPosition)){
 		unmarkedParents.remove(groupPosition)
 	    }
-            return true
+            true
         }
         expandable_list_view.setOnChildClickListener(clickListener)
-        fimButton = findViewById<View>(R.id.level) as Button
-	fimButton!!.isEnabled = false
-	fimButton!!.setOnClickListener{completaActivity()}
+        fimButton = findViewById<View>(R.id.fim_button) as Button
+        fimButton!!.isEnabled = true
+        fimButton!!.setOnClickListener{completaActivity()}
     }
 
     private fun retornaElementosDesmarcados(): HashSet<Int>{
-	val desmarcados= HashSet<Int>()
-	escolhas.forEachIndexed { i, escolhas ->
-	   if( escolha == -1){
-	       desmarcados.add(i)
+        val desmarcados= HashSet<Int>()
+        escolhas.forEachIndexed { i, escolha ->
+           if( escolha == -1){
+               desmarcados.add(i)
            }
         }
-	return desmarcados
+        return desmarcados
     }
 
-    private fun completaActivity():{
-	val desmarcadosSet = retornaElementosDesmarcados()
-	if(!desmarcadosSet.empty){
-	    val text = "Complete this shit out"
-	    Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-	    toast.show()
-	    unmarkedParents = desmarcadosSet
-	}
-	else{
-	   val intent = Intent(this, AddActivity::class.java)    
-	   val contagem = escolhas.sum() + escolhas.size()
-	   intent.putExtra("contagem",contagem) 
-	   startActivity(intent)
-	}
-	
+    private fun completaActivity(){
+        val desmarcadosSet = retornaElementosDesmarcados()
+        if(!desmarcadosSet.isEmpty()){
+            val text = "Complete this shit out"
+            val toast = Toast.makeText (this, text, Toast.LENGTH_LONG)
+            toast.show()
+            unmarkedParents = desmarcadosSet
+            /*
+             * 4 linhas abaixo apenas para testes
+             */
+            val intent = Intent(this, AddActivity::class.java)
+            val contagem = escolhas.sum() + escolhas.size
+            intent.putExtra("contagem",contagem)
+            startActivity(intent)
+        }
+        else{
+           val intent = Intent(this, AddActivity::class.java)
+           val contagem = escolhas.sum() + escolhas.size
+           intent.putExtra("contagem",contagem)
+           startActivity(intent)
+        }
     }
 }

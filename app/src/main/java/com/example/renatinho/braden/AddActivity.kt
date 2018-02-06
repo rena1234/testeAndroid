@@ -38,27 +38,30 @@ class AddActivity : AppCompatActivity() {
 
         // Toasts the test ad message on the screen. Remove this after defining your own ad unit ID.
         Toast.makeText(this, TOAST_TEXT, Toast.LENGTH_LONG).show()
-    }
 
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_add, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        return if (id == R.id.action_settings) {
-            true
-        } else super.onOptionsItemSelected(item)
+        val bundle = intent.extras
+        val contagem = bundle.getString("contagem")
+        mLevelTextView!!.text = contagem
 
     }
+    private fun retornaGrauRisco(contagem: Int): Int{
+        val risco =
+                if(contagem in 10..12){
+                    1
+                }else if(contagem in 13..14) {
+                    2
+                }else if(contagem in 15..18){
+                    3
+                }else{
+                    0
+                }
 
+        return risco
+    }
+
+    private fun escreveTexto(contagem: Int){
+
+    }
     private fun newInterstitialAd(): InterstitialAd {
         val interstitialAd = InterstitialAd(this)
         interstitialAd.adUnitId = getString(R.string.interstitial_ad_unit_id)
