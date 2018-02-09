@@ -14,23 +14,22 @@ import android.widget.TextView
 import android.widget.Toast
 
 class AddActivity : AppCompatActivity() {
-    private var mLevel: Int = 0
-    private var mNextLevelButton: Button? = null
+    private var againButton: Button? = null
     private var mInterstitialAd: InterstitialAd? = null
-    private var mLevelTextView: TextView? = null
-
+    private var riscoTextView: TextView? = null
+    private var resultTextView: TextView? = null
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
         // Create the next level button, which tries to show an interstitial when clicked.
-        mNextLevelButton = findViewById<View>(R.id.next_level_button) as Button
-        mNextLevelButton!!.isEnabled = false
-        mNextLevelButton!!.setOnClickListener { showInterstitial() }
+        againButton = findViewById<View>(R.id.next_level_button) as Button
+        againButton!!.isEnabled = false
+        againButton!!.setOnClickListener { showInterstitial() }
 
-        // Create the text view to show the level number.
-        mLevelTextView = findViewById<View>(R.id.level) as TextView
-        mLevel = START_LEVEL
+        resultTextView = findViewById<View>(R.id.contagem) as TextView
+        riscoTextView = findViewById<View>(R.id.risco) as TextView
 
         // Create the InterstitialAd and set the adUnitId (defined in values/strings.xml).
         mInterstitialAd = newInterstitialAd()
@@ -38,12 +37,14 @@ class AddActivity : AppCompatActivity() {
 
         // Toasts the test ad message on the screen. Remove this after defining your own ad unit ID.
         Toast.makeText(this, TOAST_TEXT, Toast.LENGTH_LONG).show()
+    }
 
+    private fun carregaContagem(): Int{
         val bundle = intent.extras
         val contagem = bundle.getString("contagem")
-        mLevelTextView!!.text = contagem
-
+        return contagem
     }
+
     private fun retornaGrauRisco(contagem: Int): Int{
         val risco =
                 if(contagem in 10..12){
@@ -59,24 +60,29 @@ class AddActivity : AppCompatActivity() {
         return risco
     }
 
-    private fun escreveTexto(contagem: Int){
 
+    private fun escreveTexto(contagem: Int){
+        val riskMsgs = res.getStringArray(R.array.riscoArray)
+        riscoTextView!!.text = riskMsgs[retornaGrauRisco(contagem)]
+        resultTextView!!.text = contagem
     }
+
     private fun newInterstitialAd(): InterstitialAd {
         val interstitialAd = InterstitialAd(this)
         interstitialAd.adUnitId = getString(R.string.interstitial_ad_unit_id)
         interstitialAd.adListener = object : AdListener() {
             override fun onAdLoaded() {
-                mNextLevelButton!!.isEnabled = true
+                againButton!!.isEnabled = true
             }
 
             override fun onAdFailedToLoad(errorCode: Int) {
-                mNextLevelButton!!.isEnabled = true
+                againButton!!.isEnabled = true
             }
 
             override fun onAdClosed() {
-                // Proceed to the next level.
-                goToNextLevel()
+                // COMPLETA ESSA MERDAA
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
         }
         return interstitialAd
@@ -88,29 +94,19 @@ class AddActivity : AppCompatActivity() {
             mInterstitialAd!!.show()
         } else {
             Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show()
-            goToNextLevel()
         }
     }
 
     private fun loadInterstitial() {
         // Disable the next level button and load the ad.
-        mNextLevelButton!!.isEnabled = false
+        againButton!!.isEnabled = false
         val adRequest = AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template").build()
         mInterstitialAd!!.loadAd(adRequest)
     }
 
-    private fun goToNextLevel() {
-        // Show the next level and reload the ad to prepare for the level after.
-        mLevelTextView!!.text = "Level " + ++mLevel
-        mInterstitialAd = newInterstitialAd()
-        loadInterstitial()
-    }
-
     companion object {
         // Remove the below line after defining your own ad unit ID.
         private val TOAST_TEXT = "Test ads are being shown. " + "To show live ads, replace the ad unit ID in res/values/strings.xml with your own ad unit ID."
-
-        private val START_LEVEL = 1
     }
 }

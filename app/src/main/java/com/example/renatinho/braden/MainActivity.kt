@@ -24,12 +24,6 @@ class MainActivity : AppCompatActivity() {
         val listHeader = listOf("Percepção Sensorial"
                 ,"Umidade")
 
-        val numberList = listOf("Ocasionalmente Molhada", "two")
-        val fruitList = listOf("apple", "orange")
-
-        listChild[listHeader[0]] = numberList
-        listChild[listHeader[1]] = fruitList
-
         val expandableListAdapter = ExpandableListAdapter(this,
                 listHeader,listChild,coloredParents, unmarkedParents)
 
@@ -63,7 +57,17 @@ class MainActivity : AppCompatActivity() {
         expandable_list_view.setOnChildClickListener(clickListener)
         fimButton = findViewById<View>(R.id.fim_button) as Button
         fimButton!!.isEnabled = true
+        fimButton.text = getString(R.string.btn_fim)
         fimButton!!.setOnClickListener{completaActivity()}
+    }
+
+    private fun carregaLista(listHeader : List<String>){
+        listChild[listHeader[0]] = res.getStringArray(R.array.listChild0)
+        listChild[listHeader[1]] = res.getStringArray(R.array.listChild1)
+        listChild[listHeader[2]] = res.getStringArray(R.array.listChild2)
+        listChild[listHeader[3]] = res.getStringArray(R.array.listChild3)
+        listChild[listHeader[4]] = res.getStringArray(R.array.listChild4)
+        listChild[listHeader[5]] = res.getStringArray(R.array.listChild5)
     }
 
     private fun retornaElementosDesmarcados(): HashSet<Int>{
@@ -83,13 +87,6 @@ class MainActivity : AppCompatActivity() {
             val toast = Toast.makeText (this, text, Toast.LENGTH_LONG)
             toast.show()
             unmarkedParents = desmarcadosSet
-            /*
-             * 4 linhas abaixo apenas para testes
-             */
-            val intent = Intent(this, AddActivity::class.java)
-            val contagem = escolhas.sum() + escolhas.size
-            intent.putExtra("contagem",contagem)
-            startActivity(intent)
         }
         else{
            val intent = Intent(this, AddActivity::class.java)
