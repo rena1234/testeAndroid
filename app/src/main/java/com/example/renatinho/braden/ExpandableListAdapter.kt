@@ -6,11 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
-import android.widget.TextView
-import java.text.FieldPosition
 import android.graphics.Typeface
-import android.widget.ExpandableListView
-
+import android.graphics.Color
 
 /**
  * Created by renatinho on 06/01/18.
@@ -18,8 +15,7 @@ import android.widget.ExpandableListView
 
 class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<String>
                             , val listOfChildData: HashMap<String, List<String>>
-                            , val coloredParents: HashSet<Int>
-			    , val unmarkedParents: HashSet<Int>)
+                            , val coloredParents: HashSet<Int>)
                             : BaseExpandableListAdapter()
 {
 
@@ -49,13 +45,9 @@ class ExpandableListAdapter(val context: Context, val listOfHeaderData: List<Str
         listHeaderText.setTypeface(null, Typeface.BOLD)
         listHeaderText.text = headerTitle
 
-        if(unmarkedParents.contains(groupPosition)){
-            listHeaderText.setTextColor(0xFF8363F0.toInt())
-        }
         if(coloredParents.contains(groupPosition)){
-            listHeaderText.setTextColor(0xFF8363FF.toInt())
+            listHeaderText.setTextColor(Color.GREEN)
         }
-
         return view
     }
 

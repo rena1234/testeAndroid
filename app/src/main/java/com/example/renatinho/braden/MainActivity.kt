@@ -12,7 +12,6 @@ import android.widget.Button
 class MainActivity : AppCompatActivity() {
     
     private val coloredParents = HashSet<Int>()
-    private var unmarkedParents = HashSet<Int>()
     private val listChild = HashMap<String,List<String>>()
     private val escolhas =  IntArray(6, {_ -> -1})
     private var fimButton: Button? = null
@@ -21,11 +20,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val listHeader = listOf("Percepção Sensorial"
-                ,"Umidade")
-
+        val listHeader = getResources().getStringArray(R.array.listHeader).asList()
+        carregaLista(listHeader)
         val expandableListAdapter = ExpandableListAdapter(this,
-                listHeader,listChild,coloredParents, unmarkedParents)
+                listHeader,listChild,coloredParents)
 
         expandable_list_view.setAdapter(expandableListAdapter)
 	
@@ -37,37 +35,39 @@ class MainActivity : AppCompatActivity() {
             listView?.collapseGroup(groupPosition)
             if(coloredParents.contains(groupPosition) 
 	            && escolhas[groupPosition] == childPosition )
-	    {
-	        
-		coloredParents.remove(groupPosition)
-		escolhas[groupPosition] = -1
-
-	    }
-	    else{
-	        escolhas[groupPosition] = childPosition;
+            {
+                coloredParents.remove(groupPosition)
+                escolhas[groupPosition] = -1
+            }
+            else{
+                escolhas[groupPosition] = childPosition;
                 if(!coloredParents.contains(groupPosition)){
-	            coloredParents.add(groupPosition)
-		}
-	    }
-	    if(unmarkedParents.contains(groupPosition)){
-		unmarkedParents.remove(groupPosition)
-	    }
+                    coloredParents.add(groupPosition)
+                }
+            }
             true
         }
         expandable_list_view.setOnChildClickListener(clickListener)
         fimButton = findViewById<View>(R.id.fim_button) as Button
         fimButton!!.isEnabled = true
-        fimButton.text = getString(R.string.btn_fim)
+        fimButton!!.text = getString(R.string.btn_fim)
         fimButton!!.setOnClickListener{completaActivity()}
     }
 
     private fun carregaLista(listHeader : List<String>){
-        listChild[listHeader[0]] = res.getStringArray(R.array.listChild0)
-        listChild[listHeader[1]] = res.getStringArray(R.array.listChild1)
-        listChild[listHeader[2]] = res.getStringArray(R.array.listChild2)
-        listChild[listHeader[3]] = res.getStringArray(R.array.listChild3)
-        listChild[listHeader[4]] = res.getStringArray(R.array.listChild4)
-        listChild[listHeader[5]] = res.getStringArray(R.array.listChild5)
+        listChild[listHeader[0]] =
+                resources.getStringArray(R.array.listChild0).asList()
+        listChild[listHeader[1]] =
+                resources.getStringArray(R.array.listChild1).asList()
+        listChild[listHeader[2]] =
+                resources.getStringArray(R.array.listChild2).asList()
+        listChild[listHeader[3]] =
+                resources.getStringArray(R.array.listChild3).asList()
+        listChild[listHeader[4]] =
+                resources.getStringArray(R.array.listChild4).asList()
+        listChild[listHeader[5]] =
+                resources.getStringArray(R.array.listChild5).asList()
+
     }
 
     private fun retornaElementosDesmarcados(): HashSet<Int>{
@@ -83,13 +83,12 @@ class MainActivity : AppCompatActivity() {
     private fun completaActivity(){
         val desmarcadosSet = retornaElementosDesmarcados()
         if(!desmarcadosSet.isEmpty()){
-            val text = "Complete this shit out"
+            val text = resources.getString(R.string.txt_incompleto)
             val toast = Toast.makeText (this, text, Toast.LENGTH_LONG)
             toast.show()
-            unmarkedParents = desmarcadosSet
         }
         else{
-           val intent = Intent(this, AddActivity::class.java)
+           val intent = Intent(this, ResultActivity::class.java)
            val contagem = escolhas.sum() + escolhas.size
            intent.putExtra("contagem",contagem)
            startActivity(intent)

@@ -12,6 +12,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import android.content.Intent
+import kotlinx.android.synthetic.main.activity_add.view.*
 
 class AddActivity : AppCompatActivity() {
     private var againButton: Button? = null
@@ -24,7 +26,7 @@ class AddActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add)
 
         // Create the next level button, which tries to show an interstitial when clicked.
-        againButton = findViewById<View>(R.id.next_level_button) as Button
+        againButton = findViewById<View>(R.id.again_btn) as Button
         againButton!!.isEnabled = false
         againButton!!.setOnClickListener { showInterstitial() }
 
@@ -42,7 +44,7 @@ class AddActivity : AppCompatActivity() {
     private fun carregaContagem(): Int{
         val bundle = intent.extras
         val contagem = bundle.getString("contagem")
-        return contagem
+        return contagem.toInt()
     }
 
     private fun retornaGrauRisco(contagem: Int): Int{
@@ -62,14 +64,15 @@ class AddActivity : AppCompatActivity() {
 
 
     private fun escreveTexto(contagem: Int){
-        val riskMsgs = res.getStringArray(R.array.riscoArray)
+        val riskMsgs = getResources().getStringArray(R.array.riscoArray)
         riscoTextView!!.text = riskMsgs[retornaGrauRisco(contagem)]
-        resultTextView!!.text = contagem
+        resultTextView!!.text = contagem.toString()
     }
 
     private fun newInterstitialAd(): InterstitialAd {
         val interstitialAd = InterstitialAd(this)
         interstitialAd.adUnitId = getString(R.string.interstitial_ad_unit_id)
+        val context = this
         interstitialAd.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 againButton!!.isEnabled = true
@@ -81,7 +84,7 @@ class AddActivity : AppCompatActivity() {
 
             override fun onAdClosed() {
                 // COMPLETA ESSA MERDAA
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(context, MainActivity::class.java)
                 startActivity(intent)
             }
         }

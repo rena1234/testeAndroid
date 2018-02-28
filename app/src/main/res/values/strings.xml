@@ -10,6 +10,7 @@
     <string name="title_activity_add">AddActivity</string>
     <string name="btn_fim">Calcular</string>
     <string name="btn_reinicia">Reiniciar</string>
+    <string name="txt_incompleto">Preencha todos os campos</string>
 
     <string-array name="riscoArray">
         <item>Risco Severo</item>
